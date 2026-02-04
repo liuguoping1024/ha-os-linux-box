@@ -46,5 +46,13 @@ write_rauc_config
 install_rauc_certs
 install_bootloader_config
 
+# Ensure os-* and raucdb-update scripts are executable (overlay may lose +x)
+for f in "${TARGET_DIR}/usr/libexec/os-expand" "${TARGET_DIR}/usr/libexec/os-overlay" \
+         "${TARGET_DIR}/usr/libexec/os-persists" "${TARGET_DIR}/usr/libexec/os-swapfile" \
+         "${TARGET_DIR}/usr/libexec/os-zram" "${TARGET_DIR}/usr/libexec/raucdb-update" \
+         "${TARGET_DIR}/usr/sbin/os-config"; do
+	[ -f "$f" ] && chmod +x "$f"
+done
+
 # Fix overlay presets
 "${HOST_DIR}/bin/systemctl" --root="${TARGET_DIR}" preset-all

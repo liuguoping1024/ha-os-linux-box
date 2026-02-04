@@ -1,0 +1,13 @@
+[Unit]
+Description=OS swap
+DefaultDependencies=no
+Requires=mnt-data.mount
+After=mnt-data.mount systemd-growfs@mnt-data.service
+Before=mnt-data-swapfile.swap
+
+[Service]
+Type=oneshot
+ExecStart=/usr/libexec/os-swapfile
+
+[Install]
+WantedBy=swap.target

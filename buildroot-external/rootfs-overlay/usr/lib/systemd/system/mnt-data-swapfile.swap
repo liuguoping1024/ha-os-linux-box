@@ -1,5 +1,5 @@
 [Unit]
-Description=HAOS swap file
+Description=OS swap file
 
 [Swap]
 What=/mnt/data/swapfile

@@ -1,15 +1,14 @@
 [Unit]
-Description=HassOS ZRAM tmp
+Description=Create tmp zram
 DefaultDependencies=no
-Before=tmp.mount
-RefuseManualStart=true
-RefuseManualStop=true
+Before=local-fs.target
+After=systemd-modules-load.service
+Conflicts=shutdown.target
 
 [Service]
 Type=oneshot
-ExecStart=/usr/libexec/hassos-zram -t fs -m tmp -s 16M
-RemainAfterExit=true
-StandardOutput=null
+RemainAfterExit=yes
+ExecStart=/usr/libexec/os-zram -t fs -m tmp -s 16M
 
 [Install]
-WantedBy=hassos-zram.target
+WantedBy=os-zram.target

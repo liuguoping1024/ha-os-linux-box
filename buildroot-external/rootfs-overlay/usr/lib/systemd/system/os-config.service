@@ -1,0 +1,10 @@
+[Unit]
+Description=OS Configuration Manager
+After=os-bind.target network.target
+
+[Service]
+Type=oneshot
+ExecStart=/usr/sbin/os-config
+
+[Install]
+WantedBy=multi-user.target

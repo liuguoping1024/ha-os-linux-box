@@ -22,6 +22,17 @@ mkdir -p "$(path_boot_dir)"
 # Hook pre image build stuff
 hassos_pre_image
 
+# Create empty data partition if it doesn't exist (when HASSIO is disabled)
+if [ ! -f "$(path_data_img)" ]; then
+    echo "Creating empty data.ext4 partition (HASSIO disabled)..."
+    data_img="$(path_data_img)"
+    rm -f "${data_img}"
+    truncate --size="6000M" "${data_img}"
+    mkfs.ext4 -L "hassos-data" -E lazy_itable_init=0,lazy_journal_init=0 "${data_img}"
+    e2fsck -f -p "${data_img}"
+    resize2fs "${data_img}"
+fi
+
 # Disk & OTA
 create_disk_image
 
