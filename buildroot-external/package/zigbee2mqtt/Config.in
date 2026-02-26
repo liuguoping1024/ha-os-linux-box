@@ -1,0 +1,16 @@
+config BR2_PACKAGE_ZIGBEE2MQTT
+	bool "zigbee2mqtt"
+	depends on BR2_PACKAGE_NODEJS
+	depends on BR2_PACKAGE_MOSQUITTO
+	select BR2_PACKAGE_ZIGBEE_HERDSMAN
+	help
+	  ThirdReality customized Zigbee2MQTT for BLZ radio type.
+	  Allows you to use your Zigbee devices without the vendor's
+	  bridge or gateway. It bridges events and allows you to control
+	  your Zigbee devices via MQTT.
+
+	  https://github.com/thirdreality/zigbee2mqtt
+	  https://www.zigbee2mqtt.io/
+
+comment "zigbee2mqtt needs nodejs and mosquitto"
+	depends on !BR2_PACKAGE_NODEJS || !BR2_PACKAGE_MOSQUITTO

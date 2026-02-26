@@ -1,0 +1,28 @@
+[Unit]
+Description=zigbee2mqtt
+After=network-online.target mosquitto.service
+Wants=network-online.target mosquitto.service
+StartLimitIntervalSec=300
+StartLimitBurst=10
+
+[Service]
+Type=simple
+User=root
+Environment=NODE_ENV=production
+WorkingDirectory=/opt/zigbee2mqtt
+ExecStartPre=-/bin/bash -c 'if [ -f /opt/zigbee2mqtt/scripts/zigbee2mqtt_blz_reset.sh ]; then /opt/zigbee2mqtt/scripts/zigbee2mqtt_blz_reset.sh; fi'
+ExecStart=/usr/bin/node dist/index.js
+ExecStartPost=-/bin/bash -lc 'if [ -x /opt/zigbee2mqtt/scripts/z2m-permit-on-passlist.sh ]; then ( sleep 8; /opt/zigbee2mqtt/scripts/z2m-permit-on-passlist.sh ) & fi'
+StandardOutput=inherit
+StandardError=inherit
+TimeoutStartSec=300
+Restart=always
+RestartSec=10s
+
+# Sandboxing - 允许写入数据目录
+ProtectSystem=strict
+ReadWritePaths=/opt/zigbee2mqtt/data
+ReadWritePaths=/opt/zigbee2mqtt/data/configs
+
+[Install]
+WantedBy=multi-user.target

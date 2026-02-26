@@ -18,4 +18,6 @@ source "$BR2_EXTERNAL_HASSOS_PATH/package/udisks2/Config.in"
 source "$BR2_EXTERNAL_HASSOS_PATH/package/xe-guest-utilities/Config.in"
 source "$BR2_EXTERNAL_HASSOS_PATH/package/amlogic-boot-fip-e/Config.in"
 source "$BR2_EXTERNAL_HASSOS_PATH/package/jethome-burn/Config.in"
+source "$BR2_EXTERNAL_HASSOS_PATH/package/zigbee-herdsman/Config.in"
+source "$BR2_EXTERNAL_HASSOS_PATH/package/zigbee2mqtt/Config.in"
 

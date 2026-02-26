@@ -1,0 +1,11 @@
+config BR2_PACKAGE_ZIGBEE_HERDSMAN
+	bool "zigbee-herdsman"
+	depends on BR2_PACKAGE_NODEJS
+	help
+	  ThirdReality customized Zigbee-herdsman library for BLZ radio type.
+	  This is a dependency for zigbee2mqtt.
+
+	  https://github.com/thirdreality/zigbee-herdsman
+
+comment "zigbee-herdsman needs nodejs"
+	depends on !BR2_PACKAGE_NODEJS
