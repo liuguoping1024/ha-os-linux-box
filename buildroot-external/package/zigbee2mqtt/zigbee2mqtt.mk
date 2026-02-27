@@ -75,26 +75,26 @@ define ZIGBEE2MQTT_INSTALL_TARGET_CMDS
 	ln -sfn /opt/zigbee-herdsman $(TARGET_DIR)/opt/zigbee2mqtt/node_modules/zigbee-herdsman
 	rm -f  $(TARGET_DIR)/opt/zigbee2mqtt/node_modules/.pnpm/node_modules/zigbee-herdsman 2>/dev/null || true
 
-	# Create data directory structure (可读写)
+	# Create data mountpoint (will be bind-mounted from /mnt/data/zigbee2mqtt at runtime)
 	mkdir -p $(TARGET_DIR)/opt/zigbee2mqtt/data
-	mkdir -p $(TARGET_DIR)/opt/zigbee2mqtt/data/external_converters
-	mkdir -p $(TARGET_DIR)/opt/zigbee2mqtt/data/configs
 	mkdir -p $(TARGET_DIR)/opt/zigbee2mqtt/scripts
 	
-	# Install configuration files as backups in configs subdirectory
+	# Install config templates into the app dir (copied to /mnt/data at first boot)
+	mkdir -p $(TARGET_DIR)/opt/zigbee2mqtt/configs
 	if [ -f $(ZIGBEE2MQTT_PKGDIR)/configs/configuration_zigate.yaml ]; then \
 		$(INSTALL) -D -m 0644 $(ZIGBEE2MQTT_PKGDIR)/configs/configuration_zigate.yaml \
-			$(TARGET_DIR)/opt/zigbee2mqtt/data/configs/configuration_zigate.yaml; \
+			$(TARGET_DIR)/opt/zigbee2mqtt/configs/configuration_zigate.yaml; \
 	fi
 	if [ -f $(ZIGBEE2MQTT_PKGDIR)/configs/configuration_blz.yaml ]; then \
 		$(INSTALL) -D -m 0644 $(ZIGBEE2MQTT_PKGDIR)/configs/configuration_blz.yaml \
-			$(TARGET_DIR)/opt/zigbee2mqtt/data/configs/configuration_blz.yaml; \
+			$(TARGET_DIR)/opt/zigbee2mqtt/configs/configuration_blz.yaml; \
 	fi
-	
-	# Install external converters if they exist
+
+	# Install external converters into app dir
+	mkdir -p $(TARGET_DIR)/opt/zigbee2mqtt/external_converters
 	if [ -d $(ZIGBEE2MQTT_PKGDIR)/converters ] && [ -n "$$(ls -A $(ZIGBEE2MQTT_PKGDIR)/converters/*.js 2>/dev/null)" ]; then \
 		cp $(ZIGBEE2MQTT_PKGDIR)/converters/*.js \
-			$(TARGET_DIR)/opt/zigbee2mqtt/data/external_converters/ || true; \
+			$(TARGET_DIR)/opt/zigbee2mqtt/external_converters/ || true; \
 	fi
 	
 	# Install scripts if they exist
@@ -107,9 +107,14 @@ define ZIGBEE2MQTT_INSTALL_TARGET_CMDS
 			$(TARGET_DIR)/opt/zigbee2mqtt/scripts/z2m-permit-on-passlist.sh; \
 	fi
 	
-	# Install systemd service
+	# Install systemd service and mount unit
 	$(INSTALL) -D -m 0644 $(ZIGBEE2MQTT_PKGDIR)/zigbee2mqtt.service \
 		$(TARGET_DIR)/usr/lib/systemd/system/zigbee2mqtt.service
+	$(INSTALL) -D -m 0644 $(ZIGBEE2MQTT_PKGDIR)/opt-zigbee2mqtt-data.mount \
+		$(TARGET_DIR)/usr/lib/systemd/system/opt-zigbee2mqtt-data.mount
+	mkdir -p $(TARGET_DIR)/usr/lib/systemd/system/os-bind.target.wants
+	ln -sf ../opt-zigbee2mqtt-data.mount \
+		$(TARGET_DIR)/usr/lib/systemd/system/os-bind.target.wants/opt-zigbee2mqtt-data.mount
 	# Remove non-aarch64 binaries to pass buildroot arch check
 	rm -rf $(TARGET_DIR)/opt/zigbee2mqtt/node_modules/.pnpm/esbuild@*/
 	rm -rf $(TARGET_DIR)/opt/zigbee2mqtt/node_modules/.pnpm/@esbuild+*

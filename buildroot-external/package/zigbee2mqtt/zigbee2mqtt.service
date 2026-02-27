@@ -1,7 +1,8 @@
 [Unit]
 Description=zigbee2mqtt
-After=network-online.target mosquitto.service
+After=network-online.target mosquitto.service opt-zigbee2mqtt-data.mount
 Wants=network-online.target mosquitto.service
+Requires=opt-zigbee2mqtt-data.mount
 StartLimitIntervalSec=300
 StartLimitBurst=10
 
@@ -10,6 +11,17 @@ Type=simple
 User=root
 Environment=NODE_ENV=production
 WorkingDirectory=/opt/zigbee2mqtt
+ExecStartPre=/bin/bash -c '\
+    mkdir -p /mnt/data/zigbee2mqtt/external_converters && \
+    if [ ! -f /opt/zigbee2mqtt/data/configuration.yaml ] && \
+       [ -f /opt/zigbee2mqtt/configs/configuration_blz.yaml ]; then \
+        cp /opt/zigbee2mqtt/configs/configuration_blz.yaml \
+           /opt/zigbee2mqtt/data/configuration.yaml; \
+    fi && \
+    if [ -d /opt/zigbee2mqtt/external_converters ]; then \
+        cp -n /opt/zigbee2mqtt/external_converters/*.js \
+              /opt/zigbee2mqtt/data/external_converters/ 2>/dev/null || true; \
+    fi'
 ExecStartPre=-/bin/bash -c 'if [ -f /opt/zigbee2mqtt/scripts/zigbee2mqtt_blz_reset.sh ]; then /opt/zigbee2mqtt/scripts/zigbee2mqtt_blz_reset.sh; fi'
 ExecStart=/usr/bin/node dist/index.js
 ExecStartPost=-/bin/bash -lc 'if [ -x /opt/zigbee2mqtt/scripts/z2m-permit-on-passlist.sh ]; then ( sleep 8; /opt/zigbee2mqtt/scripts/z2m-permit-on-passlist.sh ) & fi'
@@ -18,11 +30,6 @@ StandardError=inherit
 TimeoutStartSec=300
 Restart=always
 RestartSec=10s
-
-# Sandboxing - 允许写入数据目录
-ProtectSystem=strict
-ReadWritePaths=/opt/zigbee2mqtt/data
-ReadWritePaths=/opt/zigbee2mqtt/data/configs
 
 [Install]
 WantedBy=multi-user.target
