@@ -48,11 +48,7 @@ fi
 
 echo "Checking board setup"
 
-setenv fdtfile "amlogic/meson-axg-thirdreality-hub-v3.dtb"
-
-# if test "$board" = "jethub-j200"; then
-#  echo "Use JetHub D2 DT file"
-# fi;
+test -n "${fdtfile}" || setenv fdtfile "amlogic/meson-axg-thirdreality-hub-v3.dtb"
 
 echo "Loading device tree ${fdtfile}"
 fatload ${devtype} ${devnum}:1 ${fdt_addr_r} ${fdtfile}

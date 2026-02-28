@@ -1,0 +1,2 @@
+# HubV3A uses its own DTB (no Thread UART, different pinctrl)
+fdtfile=amlogic/meson-axg-thirdreality-hub-v3a.dtb

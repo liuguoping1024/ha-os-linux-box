@@ -1,0 +1,7 @@
+config BR2_PACKAGE_PYTHON_BFLB_CRYPTO_PLUS
+	bool "python-bflb-crypto-plus"
+	select BR2_PACKAGE_PYTHON_PYCRYPTODOME
+	help
+	  Bouffalo Lab crypto utilities for firmware tools.
+
+	  https://pypi.org/project/bflb-crypto-plus/

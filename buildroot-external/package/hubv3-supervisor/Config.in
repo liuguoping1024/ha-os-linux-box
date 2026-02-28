@@ -1,0 +1,25 @@
+config BR2_PACKAGE_HUBV3_SUPERVISOR
+	bool "hubv3-supervisor"
+	depends on BR2_PACKAGE_LIBGLIB2
+	depends on BR2_PACKAGE_BLUEZ5_UTILS
+	select BR2_PACKAGE_JSON_C
+	select BR2_PACKAGE_AVAHI
+	select BR2_PACKAGE_AVAHI_DAEMON
+	select BR2_PACKAGE_LIBGPIOD
+	select BR2_PACKAGE_OPENSSL
+	select BR2_PACKAGE_LIBMICROHTTPD
+	select BR2_PACKAGE_LIBCURL
+	select BR2_PACKAGE_LIBYAML
+	select BR2_PACKAGE_SQLITE
+	select BR2_PACKAGE_CJSON
+	help
+	  LinuxBox Supervisor for ThirdReality Hub V3.
+	  A C-based device management daemon providing hardware control
+	  (LED, button, GPIO), network management, HTTP API, D-Bus service,
+	  Zigbee/Thread device management, BLE provisioning, OTA upgrade,
+	  mDNS broadcast, and Home Assistant integration.
+
+	  https://github.com/liuguoping1024/LinuxBox_Supervisor
+
+comment "hubv3-supervisor needs libglib2 and bluez5_utils"
+	depends on !BR2_PACKAGE_LIBGLIB2 || !BR2_PACKAGE_BLUEZ5_UTILS

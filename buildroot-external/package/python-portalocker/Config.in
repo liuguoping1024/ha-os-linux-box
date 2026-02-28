@@ -1,0 +1,6 @@
+config BR2_PACKAGE_PYTHON_PORTALOCKER
+	bool "python-portalocker"
+	help
+	  Cross-platform (posix/nt) API for flock-style file locking.
+
+	  https://github.com/WoLpH/portalocker
