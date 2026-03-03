@@ -1,14 +1,11 @@
-[Unit]
-Description=Zigbee2MQTT data directory (persistent)
-Requires=mnt-data.mount
-After=mnt-data.mount
-Before=zigbee2mqtt.service
+  [Unit]
+  Description=Zigbee2MQTT data directory (overlay-backed)
+  Requires=mnt-overlay.mount
+  After=mnt-overlay.mount
+  Before=zigbee2mqtt.service
 
-[Mount]
-What=/mnt/data/zigbee2mqtt
-Where=/opt/zigbee2mqtt/data
-Type=None
-Options=bind
-
-[Install]
-WantedBy=os-bind.target
+  [Mount]
+  What=/mnt/overlay/opt/zigbee2mqtt/data
+  Where=/opt/zigbee2mqtt/data
+  Type=none
+  Options=bind

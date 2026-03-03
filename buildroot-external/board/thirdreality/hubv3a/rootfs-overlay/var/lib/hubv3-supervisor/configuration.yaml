@@ -13,12 +13,28 @@ version: 1
 
 hardware:
   # Button GPIO Configuration
+  # HubV3 / HubV3B: chip="gpiochip0", line=26
+  # HubV3A:         chip="gpiochip1", line=11
   button:
-    # chip: "gpiochip0"
-    # line: 26
-    # Alternative configuration for hubv3a dev boards:
     chip: "gpiochip1"
     line: 11
+
+  # Zigbee Module GPIO Configuration (BL702 reset/boot pins)
+  # HubV3/HubV3B defaults: reset_line=1, boot_line=3 (GPIOZ_1/GPIOZ_3)
+  # HubV3A values:  reset_line=43, boot_line=42 (GPIOA_17/GPIOA_16)
+  # chip: GPIO chip number (integer, e.g., 0 for gpiochip0)
+  zigbee:
+    chip: 0
+    reset_line: 43
+    boot_line: 42
+
+  # # Thread Module GPIO Configuration
+  # # HubV3/HubV3B defaults: reset_line=27, boot_line=29 (GPIOA_1/GPIOA_3)
+  # # HubV3A values:  reset_line=2,  boot_line=4
+  # thread:
+  #   chip: 0
+  #   reset_line: 2
+  #   boot_line: 4
 
 
 # ============================================================================
@@ -29,14 +45,14 @@ system_info:
   release_files:
     t3r: "/etc/t3r-release"
     armbian: "/etc/armbian-release"
-
+  
   # Device name prefixes based on board type
   device_prefixes:
     trhubv3: "3RHUB-"
     trhubv3a: "3RHUB-"
     trhubv3b: "3RCARE-"
     default: "3RHUB-"
-
+  
 
 # ============================================================================
 # Software Package Configuration
@@ -47,44 +63,44 @@ software_packages:
   # Home Assistant packages
   - package: "thirdreality-hacore-config"
     key: "config"
-
+    
   - package: "thirdreality-python3"
     key: "python3"
-
+    
   - package: "thirdreality-hacore"
     key: "hacore"
     required: true
-
+    
   - package: "thirdreality-otbr-agent"
     key: "otbr-agent"
-
+    
   - package: "thirdreality-zigbee-mqtt"
     key: "zigbee-mqtt"
     required: true
-
+    
   - package: "thirdreality-music-assistant"
     key: "music-assistant"
-
+    
   # OpenHAB packages
   - package: "thirdreality-openhab"
     key: "openhab"
-
+    
   # System packages
   - package: "thirdreality-board-firmware"
     key: "board-firmware"
-
+    
   - package: "thirdreality-zwave"
     key: "zwave"
-
+    
   - package: "thirdreality-enocean"
     key: "enocean"
-
+    
   - package: "thirdreality-bridge"
     key: "thirdreality-bridge"
-
+    
   - package: "linuxbox-supervisor"
     key: "linuxbox-supervisor"
-
+    
   - package: "linux-image-current-meson64"
     key: "linux-image"
 
@@ -105,13 +121,13 @@ software_report_packages:
 software_config_directories:
   - source: "/var/lib/thread"
     mapped_name: "thread_data"
-
+    
   - source: "/var/lib/homeassistant"
     mapped_name: "homeassistant_data"
-
+    
   - source: "/opt/zigbee2mqtt/data"
     mapped_name: "zigbee2mqtt_data"
-
+    
   - source: "/etc/mosquitto"
     mapped_name: "mosquitto_config"
 
@@ -137,44 +153,44 @@ backup_restore:
 
   # Restore record directory
   restore_record_dir: "/usr/lib/thirdreality/conf"
-
+  
   # Maximum number of backups to keep (0 = unlimited)
   max_backups: 5
-
+  
   # Exclude patterns for backup (fnmatch style)
   # These files/directories will be skipped during backup
   exclude_patterns:
     # Log files
     - "*.log"
     - "*.log.*"
-
+    
     # Temporary files
     - "*.tmp"
     - "*.cache"
-
+    
     # Cache directories
     - "cache/"
     - "logs/"
     - "log/"
     - "temp/"
     - "tmp/"
-
+    
     # Python cache
     - "__pycache__/"
     - "*.pyc"
-
+    
     # Process files
     - "*.pid"
     - "*.sock"
-
+    
     # Database temporary files
     - "*.db-wal"
     - "*.db-shm"
-
+    
     # Backup files
     - "*.backup"
     - "*.bak"
-
+  
   # Database cleanup settings
   database_cleanup:
     # Database path in backup (relative to mapped_name)
@@ -197,7 +213,7 @@ ble:
   # 配网超时时间（秒）
   # 客户端断连后会重新计时
   provisioning_timeout: 300
-
+  
   # BlueZ adapter 名称
   adapter: "hci0"
 
@@ -208,4 +224,3 @@ zigbee2mqtt:
   data_path: "/opt/zigbee2mqtt/data"
   config_file: "configuration.yaml"
   default_template: "/lib/thirdreality/conf/configuration_blz.yaml.default"
-

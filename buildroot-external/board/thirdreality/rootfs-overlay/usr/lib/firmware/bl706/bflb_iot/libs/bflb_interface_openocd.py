@@ -24,8 +24,12 @@ import time
 import binascii
 import subprocess
 import threading
-import telnetlib
 import serial
+
+try:
+    import telnetlib
+except ImportError:
+    telnetlib = None
 
 try:
     import bflb_path

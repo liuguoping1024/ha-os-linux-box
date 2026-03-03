@@ -10,8 +10,14 @@ function fix_rootfs() {
 
     # Cleanup root
     rm -rf "${TARGET_DIR:?}/media"
-    rm -rf "${TARGET_DIR:?}/srv"
-    rm -rf "${TARGET_DIR:?}/opt"
+    # Remove /opt only when zigbee2mqtt is not installed (zigbee2mqtt and zigbee-herdsman use /opt)
+    if [ ! -d "${TARGET_DIR}/opt/zigbee2mqtt" ]; then
+        rm -rf "${TARGET_DIR:?}/opt"
+    fi
+    # Remove /srv only when neither homeassistant nor matter_server is present (used at runtime by HA, matter_server, etc.)
+    if [ ! -d "${TARGET_DIR}/srv/homeassistant" ]; then
+        rm -rf "${TARGET_DIR:?}/srv"
+    fi
 
     # Cleanup miscs
     rm -rf "${TARGET_DIR}/usr/lib/modules-load.d"

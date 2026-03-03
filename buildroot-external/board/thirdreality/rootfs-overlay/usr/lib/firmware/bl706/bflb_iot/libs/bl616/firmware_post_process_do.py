@@ -8,7 +8,10 @@ import codecs
 
 import ecdsa
 
-from CryptoPlus.Cipher import AES as AES_XTS
+try:
+    from CryptoPlus.Cipher import AES as AES_XTS
+except ImportError:
+    AES_XTS = None
 
 from libs import bflb_utils
 from libs.bflb_utils import img_create_sha256_data, img_create_encrypt_data

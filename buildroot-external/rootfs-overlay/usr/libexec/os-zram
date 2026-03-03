@@ -56,6 +56,8 @@ if [ "$TYPE" = "swap" ] && [ "$SIZE" -eq "0" ]; then
     SIZE="$(awk '/MemTotal/{ print $2 * 0.25 }' /proc/meminfo)K"
 fi
 
+SIZE="16M"
+
 # Init device
 zramctl "$DEVICE" -s "$SIZE" -a lz4
 

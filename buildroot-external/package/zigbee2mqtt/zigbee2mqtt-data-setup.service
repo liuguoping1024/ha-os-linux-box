@@ -1,0 +1,14 @@
+[Unit]
+Description=Zigbee2MQTT data directory setup on /mnt/overlay
+Requires=mnt-overlay.mount
+After=mnt-overlay.mount
+Before=opt-zigbee2mqtt-data.mount
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+ExecStart=/bin/mkdir -p /mnt/overlay/opt/zigbee2mqtt/data
+ExecStart=/bin/mkdir -p /mnt/overlay/opt/zigbee2mqtt/data/external_converters
+
+[Install]
+WantedBy=os-bind.target

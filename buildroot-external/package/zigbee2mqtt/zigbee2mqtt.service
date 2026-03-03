@@ -23,7 +23,7 @@ ExecStartPre=/bin/bash -c '\
               /opt/zigbee2mqtt/data/external_converters/ 2>/dev/null || true; \
     fi'
 ExecStartPre=-/bin/bash -c 'if [ -f /opt/zigbee2mqtt/scripts/zigbee2mqtt_blz_reset.sh ]; then /opt/zigbee2mqtt/scripts/zigbee2mqtt_blz_reset.sh; fi'
-ExecStart=/usr/bin/node dist/index.js
+ExecStart=/usr/bin/node index.js
 ExecStartPost=-/bin/bash -lc 'if [ -x /opt/zigbee2mqtt/scripts/z2m-permit-on-passlist.sh ]; then ( sleep 8; /opt/zigbee2mqtt/scripts/z2m-permit-on-passlist.sh ) & fi'
 StandardOutput=inherit
 StandardError=inherit

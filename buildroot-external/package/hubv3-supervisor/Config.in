@@ -1,7 +1,7 @@
 config BR2_PACKAGE_HUBV3_SUPERVISOR
 	bool "hubv3-supervisor"
-	depends on BR2_PACKAGE_LIBGLIB2
 	depends on BR2_PACKAGE_BLUEZ5_UTILS
+	select BR2_PACKAGE_LIBGLIB2
 	select BR2_PACKAGE_JSON_C
 	select BR2_PACKAGE_AVAHI
 	select BR2_PACKAGE_AVAHI_DAEMON
@@ -21,5 +21,5 @@ config BR2_PACKAGE_HUBV3_SUPERVISOR
 
 	  https://github.com/liuguoping1024/LinuxBox_Supervisor
 
-comment "hubv3-supervisor needs libglib2 and bluez5_utils"
-	depends on !BR2_PACKAGE_LIBGLIB2 || !BR2_PACKAGE_BLUEZ5_UTILS
+comment "hubv3-supervisor needs bluez5_utils"
+	depends on !BR2_PACKAGE_BLUEZ5_UTILS

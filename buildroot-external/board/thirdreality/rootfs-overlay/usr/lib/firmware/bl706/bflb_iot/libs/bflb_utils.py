@@ -37,11 +37,19 @@ import platform
 import codecs
 from glob import glob
 
-import pylink
+try:
+    import pylink
+except ImportError:
+    pylink = None
+
 from serial import Serial
 from Crypto.Util import Counter
 from Crypto.Cipher import AES
-from CryptoPlus.Cipher import AES as AES_XTS
+
+try:
+    from CryptoPlus.Cipher import AES as AES_XTS
+except ImportError:
+    AES_XTS = None
 
 try:
     from PySide2 import QtCore

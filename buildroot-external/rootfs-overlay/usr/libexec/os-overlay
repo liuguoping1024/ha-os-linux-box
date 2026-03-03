@@ -1,6 +1,8 @@
 #!/bin/sh
 
 mkdir -p /mnt/overlay/etc/
+mkdir -p /mnt/overlay/opt/zigbee2mqtt/data
+mkdir -p /mnt/overlay/opt/zigbee2mqtt/data/external_converters
 
 # Network
 mkdir -p /mnt/overlay/etc/NetworkManager/system-connections

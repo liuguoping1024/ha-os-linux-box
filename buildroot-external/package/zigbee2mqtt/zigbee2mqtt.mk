@@ -66,7 +66,8 @@ endef
 
 define ZIGBEE2MQTT_INSTALL_TARGET_CMDS
 	mkdir -p $(TARGET_DIR)/opt/zigbee2mqtt
-	# Only copy runtime-needed files: built output and production node_modules
+	# Only copy runtime-needed files: entrypoint, built output and production node_modules
+	cp -f    $(@D)/index.js        $(TARGET_DIR)/opt/zigbee2mqtt/
 	cp -dpfr $(@D)/dist            $(TARGET_DIR)/opt/zigbee2mqtt/
 	cp -dpfr $(@D)/node_modules    $(TARGET_DIR)/opt/zigbee2mqtt/
 	cp -f    $(@D)/package.json    $(TARGET_DIR)/opt/zigbee2mqtt/
@@ -112,9 +113,13 @@ define ZIGBEE2MQTT_INSTALL_TARGET_CMDS
 		$(TARGET_DIR)/usr/lib/systemd/system/zigbee2mqtt.service
 	$(INSTALL) -D -m 0644 $(ZIGBEE2MQTT_PKGDIR)/opt-zigbee2mqtt-data.mount \
 		$(TARGET_DIR)/usr/lib/systemd/system/opt-zigbee2mqtt-data.mount
+	$(INSTALL) -D -m 0644 $(ZIGBEE2MQTT_PKGDIR)/zigbee2mqtt-data-setup.service \
+		$(TARGET_DIR)/usr/lib/systemd/system/zigbee2mqtt-data-setup.service
 	mkdir -p $(TARGET_DIR)/usr/lib/systemd/system/os-bind.target.wants
 	ln -sf ../opt-zigbee2mqtt-data.mount \
 		$(TARGET_DIR)/usr/lib/systemd/system/os-bind.target.wants/opt-zigbee2mqtt-data.mount
+	ln -sf ../zigbee2mqtt-data-setup.service \
+		$(TARGET_DIR)/usr/lib/systemd/system/os-bind.target.wants/zigbee2mqtt-data-setup.service
 	# Remove non-aarch64 binaries to pass buildroot arch check
 	rm -rf $(TARGET_DIR)/opt/zigbee2mqtt/node_modules/.pnpm/esbuild@*/
 	rm -rf $(TARGET_DIR)/opt/zigbee2mqtt/node_modules/.pnpm/@esbuild+*
