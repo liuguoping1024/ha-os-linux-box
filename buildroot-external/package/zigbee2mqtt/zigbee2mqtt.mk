@@ -113,13 +113,11 @@ define ZIGBEE2MQTT_INSTALL_TARGET_CMDS
 		$(TARGET_DIR)/usr/lib/systemd/system/zigbee2mqtt.service
 	$(INSTALL) -D -m 0644 $(ZIGBEE2MQTT_PKGDIR)/opt-zigbee2mqtt-data.mount \
 		$(TARGET_DIR)/usr/lib/systemd/system/opt-zigbee2mqtt-data.mount
-	$(INSTALL) -D -m 0644 $(ZIGBEE2MQTT_PKGDIR)/zigbee2mqtt-data-setup.service \
-		$(TARGET_DIR)/usr/lib/systemd/system/zigbee2mqtt-data-setup.service
-	mkdir -p $(TARGET_DIR)/usr/lib/systemd/system/os-bind.target.wants
+	mkdir -p $(TARGET_DIR)/usr/lib/systemd/system/multi-user.target.wants
 	ln -sf ../opt-zigbee2mqtt-data.mount \
-		$(TARGET_DIR)/usr/lib/systemd/system/os-bind.target.wants/opt-zigbee2mqtt-data.mount
-	ln -sf ../zigbee2mqtt-data-setup.service \
-		$(TARGET_DIR)/usr/lib/systemd/system/os-bind.target.wants/zigbee2mqtt-data-setup.service
+		$(TARGET_DIR)/usr/lib/systemd/system/multi-user.target.wants/opt-zigbee2mqtt-data.mount
+	ln -sf ../zigbee2mqtt.service \
+		$(TARGET_DIR)/usr/lib/systemd/system/multi-user.target.wants/zigbee2mqtt.service
 	# Remove non-aarch64 binaries to pass buildroot arch check
 	rm -rf $(TARGET_DIR)/opt/zigbee2mqtt/node_modules/.pnpm/esbuild@*/
 	rm -rf $(TARGET_DIR)/opt/zigbee2mqtt/node_modules/.pnpm/@esbuild+*

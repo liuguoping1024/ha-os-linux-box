@@ -1,0 +1,14 @@
+[Unit]
+Description=hubv3-supervisor persistent state
+Requires=mnt-overlay.mount os-overlay.service
+After=mnt-overlay.mount os-overlay.service
+Before=supervisor.service
+
+[Mount]
+What=/mnt/overlay/var/lib/hubv3-supervisor
+Where=/var/lib/hubv3-supervisor
+Type=none
+Options=bind
+
+[Install]
+WantedBy=os-bind.target
