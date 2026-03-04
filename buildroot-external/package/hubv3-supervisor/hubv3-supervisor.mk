@@ -18,17 +18,17 @@ define HUBV3_SUPERVISOR_INSTALL_EXTRAS
 	# D-Bus policy
 	$(INSTALL) -D -m 0644 $(@D)/config/dbus/com.thirdreality.linuxbox.Supervisor.conf \
 		$(TARGET_DIR)/etc/dbus-1/system.d/com.thirdreality.linuxbox.Supervisor.conf
-	# Config directory with defaults (rootfs-overlay will override configuration.yaml)
-	$(INSTALL) -d $(TARGET_DIR)/var/lib/hubv3-supervisor
+	# Default config (read-only, copied to /mnt/overlay on first boot by os-overlay)
+	$(INSTALL) -d $(TARGET_DIR)/etc/hubv3-supervisor
 	$(INSTALL) -D -m 0644 $(@D)/config/configuration.yaml \
-		$(TARGET_DIR)/var/lib/hubv3-supervisor/configuration.yaml
-	# Static web UI files
-	$(INSTALL) -d $(TARGET_DIR)/var/lib/hubv3-supervisor/static/css
-	$(INSTALL) -d $(TARGET_DIR)/var/lib/hubv3-supervisor/static/js
-	cp -dpfr $(@D)/config/static/* $(TARGET_DIR)/var/lib/hubv3-supervisor/static/
-	# Zigbee2MQTT conf templates
-	$(INSTALL) -d $(TARGET_DIR)/var/lib/hubv3-supervisor/conf
-	cp -dpfr $(@D)/config/conf/* $(TARGET_DIR)/var/lib/hubv3-supervisor/conf/
+		$(TARGET_DIR)/etc/hubv3-supervisor/configuration.yaml
+	# Zigbee2MQTT conf templates (read-only)
+	$(INSTALL) -d $(TARGET_DIR)/etc/hubv3-supervisor/conf
+	cp -dpfr $(@D)/config/conf/* $(TARGET_DIR)/etc/hubv3-supervisor/conf/
+	# Static web UI files (read-only, served directly from /usr/share)
+	$(INSTALL) -d $(TARGET_DIR)/usr/share/hubv3-supervisor/static/css
+	$(INSTALL) -d $(TARGET_DIR)/usr/share/hubv3-supervisor/static/js
+	cp -dpfr $(@D)/config/static/* $(TARGET_DIR)/usr/share/hubv3-supervisor/static/
 endef
 HUBV3_SUPERVISOR_POST_INSTALL_TARGET_HOOKS += HUBV3_SUPERVISOR_INSTALL_EXTRAS
 

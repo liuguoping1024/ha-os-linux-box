@@ -1,0 +1,29 @@
+[Unit]
+Description=Supervisor Device Management Service
+After=dbus.service systemd-udevd.service network.target var-lib-hubv3-supervisor.mount
+Requires=var-lib-hubv3-supervisor.mount
+Wants=network.target
+Before=home-assistant.service zigbee2mqtt.service otbr-agent.service
+
+[Service]
+Type=simple
+ExecStart=/usr/local/bin/supervisor --daemon --html /usr/share/hubv3-supervisor/static
+ExecStartPre=/bin/sh -c 'mkdir -p /var/log'
+ExecStartPre=/bin/sh -c 'if [ -f /var/log/supervisor.log ]; then mv /var/log/supervisor.log /var/log/supervisor.log.1; fi'
+ExecStartPre=/bin/sh -c 'test -e /dev/gpiochip0 || echo "WARNING: GPIO device not ready"'
+Restart=on-failure
+RestartSec=5
+StartLimitInterval=200
+StartLimitBurst=5
+User=root
+Group=root
+WorkingDirectory=/var/lib/hubv3-supervisor
+Environment="PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
+Environment="SUPERVISOR_LOG=/var/log/supervisor.log"
+LimitNOFILE=65536
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=supervisor
+
+[Install]
+WantedBy=multi-user.target

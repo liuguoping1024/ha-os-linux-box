@@ -1,0 +1,17 @@
+#!/bin/sh
+
+# Zigbee2MQTT persistent data
+mkdir -p /mnt/overlay/opt/zigbee2mqtt/data
+mkdir -p /mnt/overlay/opt/zigbee2mqtt/data/external_converters
+
+# Mosquitto persistent data
+mkdir -p /mnt/overlay/var/lib/mosquitto
+
+# Supervisor persistent state (survives zram /var remount)
+# Seed from /etc/hubv3-supervisor on first boot, then bind-mount overlay dir
+if [ ! -d /mnt/overlay/var/lib/hubv3-supervisor ]; then
+    mkdir -p /mnt/overlay/var/lib/hubv3-supervisor
+    if [ -d /etc/hubv3-supervisor ]; then
+        cp -a /etc/hubv3-supervisor/. /mnt/overlay/var/lib/hubv3-supervisor/
+    fi
+fi

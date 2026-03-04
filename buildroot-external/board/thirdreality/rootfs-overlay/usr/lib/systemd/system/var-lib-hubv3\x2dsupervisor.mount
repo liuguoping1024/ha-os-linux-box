@@ -1,7 +1,7 @@
 [Unit]
 Description=hubv3-supervisor persistent state
-Requires=mnt-overlay.mount os-overlay.service
-After=mnt-overlay.mount os-overlay.service
+Requires=mnt-overlay.mount hubv3-overlay.service
+After=mnt-overlay.mount hubv3-overlay.service
 Before=supervisor.service
 
 [Mount]

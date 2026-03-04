@@ -1,0 +1,15 @@
+[Unit]
+Description=ThirdReality overlay setup
+DefaultDependencies=no
+RefuseManualStart=true
+RefuseManualStop=true
+Before=os-bind.target
+After=mnt-overlay.mount os-overlay.service
+
+[Service]
+Type=oneshot
+ExecStart=/usr/libexec/hubv3-overlay
+RemainAfterExit=true
+
+[Install]
+WantedBy=local-fs.target
