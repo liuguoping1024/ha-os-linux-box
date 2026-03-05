@@ -45,7 +45,7 @@ try:
 except NameError:
     FNFError = IOError
 
-TIME_RE = re.compile("([0-9]{2}):([0-9]{2}):([0-9]{2})(\.([0-9]{3,6}))?")
+TIME_RE = re.compile(r"([0-9]{2}):([0-9]{2}):([0-9]{2})(\.([0-9]{3,6}))?")
 
 
 class TomlDecodeError(ValueError):

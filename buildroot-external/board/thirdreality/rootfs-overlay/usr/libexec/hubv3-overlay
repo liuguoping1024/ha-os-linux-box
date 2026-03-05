@@ -18,3 +18,7 @@ fi
 
 # Bridge persistent state
 mkdir -p /mnt/overlay/var/lib/hubv3-bridge
+
+# bflb_iot firmware tool needs a writable layer (overlayfs)
+mkdir -p /mnt/overlay/usr/lib/firmware/bl706/bflb_iot/upper
+mkdir -p /mnt/overlay/usr/lib/firmware/bl706/bflb_iot/work

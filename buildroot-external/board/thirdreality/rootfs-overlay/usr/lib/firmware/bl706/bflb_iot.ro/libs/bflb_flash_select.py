@@ -152,7 +152,7 @@ def update_flash_cfg_data(chipname, chiptype, flash_id, cfg, bh_cfg_file, cfg_ke
         fp.write(data)
         fp.close()
 
-    flash_file = re.compile('\s+').split(cfg.get("FLASH_CFG", "file"))
+    flash_file = re.compile(r'\s+').split(cfg.get("FLASH_CFG", "file"))
     for f in flash_file:
         fp = open(os.path.join(app_path, f), 'rb')
         rdata = bytearray(fp.read())

@@ -764,7 +764,7 @@ def verify_hex_num(string):
     length = len(string)
     i = 0
     while True:
-        if re.match('\A[0-9a-fA-F]+\Z', string[i:i + 1]) is None:
+        if re.match(r'\A[0-9a-fA-F]+\Z', string[i:i + 1]) is None:
             return False
         i += 1
         if i >= length:
@@ -947,7 +947,7 @@ def serial_enumerate():
                 else:
                     uart_ports.append(p)
         try:
-            uart_ports = sorted(uart_ports, key=lambda x: int(re.match('COM(\d+)', x).group(1)))
+            uart_ports = sorted(uart_ports, key=lambda x: int(re.match(r'COM(\d+)', x).group(1)))
         except Exception:
             uart_ports = sorted(uart_ports)
         ports = sorted(prog_ports) + sorted(sdio_ports) + uart_ports

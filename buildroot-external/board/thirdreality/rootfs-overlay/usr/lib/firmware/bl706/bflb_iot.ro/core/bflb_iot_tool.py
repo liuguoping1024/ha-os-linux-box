@@ -2083,7 +2083,7 @@ def run(argv):
         ports.append(item["port"])
     if ports:
         try:
-            port = sorted(ports, key=lambda x: int(re.match('COM(\d+)', x).group(1)))[0]
+            port = sorted(ports, key=lambda x: int(re.match(r'COM(\d+)', x).group(1)))[0]
         except Exception:
             port = sorted(ports)[0]
     parser = argparse.ArgumentParser(description='iot-tool')

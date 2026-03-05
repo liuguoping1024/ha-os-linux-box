@@ -3573,8 +3573,8 @@ class BflbEflashLoader(object):
                         address = address.split(",")
                         erase = 1
                     else:
-                        flash_file = re.compile('\s+').split(cfg.get("FLASH_CFG", "file"))
-                        address = re.compile('\s+').split(cfg.get("FLASH_CFG", "address"))
+                        flash_file = re.compile(r'\s+').split(cfg.get("FLASH_CFG", "file"))
+                        address = re.compile(r'\s+').split(cfg.get("FLASH_CFG", "address"))
                     if csvfile and csvaddr:
                         bflb_utils.printf("factory info burn")
                         csvbin = os.path.join(chip_path, self._chip_name, self._outdir, "media.bin")

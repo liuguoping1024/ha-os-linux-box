@@ -59,6 +59,7 @@ disable_isp()
 }
 
 BFLB_IOT_DIR="/usr/lib/firmware/bl706/bflb_iot"
+export PYTHONWARNINGS="ignore::SyntaxWarning"
 
 check_thread_support()
 {

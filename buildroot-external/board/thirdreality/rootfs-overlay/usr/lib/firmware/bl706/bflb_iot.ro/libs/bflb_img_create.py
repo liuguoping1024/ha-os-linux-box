@@ -80,8 +80,8 @@ def compress_dir(chipname, zippath, efuse_load=False):
     cfg_file = os.path.join(chip_path, chipname, "eflash_loader/eflash_loader_cfg.ini")
     cfg = BFConfigParser()
     cfg.read(cfg_file)
-    flash_file = re.compile('\s+').split(cfg.get("FLASH_CFG", "file"))
-    address = re.compile('\s+').split(cfg.get("FLASH_CFG", "address"))
+    flash_file = re.compile(r'\s+').split(cfg.get("FLASH_CFG", "file"))
+    address = re.compile(r'\s+').split(cfg.get("FLASH_CFG", "address"))
     if check_pt_file(flash_file, address) is not True:
         bflb_utils.printf("PT Check Fail")
         set_error_code("0082")
@@ -136,8 +136,8 @@ def compress_dir_iot(chipname, outdir, efuse_load=False):
     cfg_file = os.path.join(chip_path, chipname, "eflash_loader/eflash_loader_cfg.ini")
     cfg = BFConfigParser()
     cfg.read(cfg_file)
-    flash_file = re.compile('\s+').split(cfg.get("FLASH_CFG", "file"))
-    address = re.compile('\s+').split(cfg.get("FLASH_CFG", "address"))
+    flash_file = re.compile(r'\s+').split(cfg.get("FLASH_CFG", "file"))
+    address = re.compile(r'\s+').split(cfg.get("FLASH_CFG", "address"))
     if check_pt_file(flash_file, address) is not True:
         bflb_utils.printf("PT Check Fail")
         set_error_code("0082")
@@ -181,7 +181,7 @@ def compress_dir_iot(chipname, outdir, efuse_load=False):
                     cfg_file = os.path.join(dirpath, file)
                     cfg = BFConfigParser()
                     cfg.read(cfg_file)
-                    flash_file = re.compile('\s+').split(cfg.get("FLASH_CFG", "file"))
+                    flash_file = re.compile(r'\s+').split(cfg.get("FLASH_CFG", "file"))
                     list_file = []
                     for item in flash_file:
                         filedir = convert_path(item)

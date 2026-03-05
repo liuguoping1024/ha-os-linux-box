@@ -1,0 +1,13 @@
+[Unit]
+Description=Writable overlay for bflb_iot firmware tool
+Requires=mnt-overlay.mount hubv3-overlay.service
+After=mnt-overlay.mount hubv3-overlay.service
+
+[Mount]
+What=overlay
+Where=/usr/lib/firmware/bl706/bflb_iot
+Type=overlay
+Options=lowerdir=/usr/lib/firmware/bl706/bflb_iot.ro,upperdir=/mnt/overlay/usr/lib/firmware/bl706/bflb_iot/upper,workdir=/mnt/overlay/usr/lib/firmware/bl706/bflb_iot/work
+
+[Install]
+WantedBy=os-bind.target

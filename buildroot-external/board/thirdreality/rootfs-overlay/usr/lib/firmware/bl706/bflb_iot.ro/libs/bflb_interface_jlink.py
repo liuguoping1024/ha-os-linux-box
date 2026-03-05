@@ -78,7 +78,7 @@ class BflbJLinkPort(object):
             else:
                 self._jlink = pylink.JLink()
                 self.jlink_path = "JLinkExe"
-            match = re.search("\d{8,10}", device, re.I)
+            match = re.search(r"\d{8,10}", device, re.I)
             if match is not None:
                 bflb_utils.printf(device)
                 self._jlink.open(serial_no=int(device))
