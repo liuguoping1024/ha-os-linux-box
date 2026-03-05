@@ -15,3 +15,6 @@ if [ ! -d /mnt/overlay/var/lib/hubv3-supervisor ]; then
         cp -a /etc/hubv3-supervisor/. /mnt/overlay/var/lib/hubv3-supervisor/
     fi
 fi
+
+# Bridge persistent state
+mkdir -p /mnt/overlay/var/lib/hubv3-bridge

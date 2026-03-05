@@ -3,7 +3,7 @@ set -e
 
 swapfile="/mnt/data/swapfile"
 # Swap space in 4k blocks
-swapsize="$(awk '/MemTotal/{ print int($2 * 0.33 / 4) }' /proc/meminfo)"
+swapsize="$(awk '/MemTotal/{ print int($2 * 0.15 / 4) }' /proc/meminfo)"
 
 
 if [ ! -s "${swapfile}" ] || [ "$(stat "${swapfile}" -c '%s')" -lt $((swapsize * 4096)) ]; then

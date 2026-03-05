@@ -12,7 +12,6 @@ User=root
 Environment=NODE_ENV=production
 WorkingDirectory=/opt/zigbee2mqtt
 ExecStartPre=/bin/bash -c '\
-    mkdir -p /mnt/data/zigbee2mqtt/external_converters && \
     if [ ! -f /opt/zigbee2mqtt/data/configuration.yaml ] && \
        [ -f /opt/zigbee2mqtt/configs/configuration_blz.yaml ]; then \
         cp /opt/zigbee2mqtt/configs/configuration_blz.yaml \

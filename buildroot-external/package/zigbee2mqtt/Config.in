@@ -2,6 +2,7 @@ config BR2_PACKAGE_ZIGBEE2MQTT
 	bool "zigbee2mqtt"
 	depends on BR2_PACKAGE_NODEJS
 	depends on BR2_PACKAGE_MOSQUITTO
+	select BR2_PACKAGE_ICU
 	select BR2_PACKAGE_ZIGBEE_HERDSMAN
 	help
 	  ThirdReality customized Zigbee2MQTT for BLZ radio type.

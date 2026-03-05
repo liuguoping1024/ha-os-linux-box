@@ -1,7 +1,7 @@
 [Unit]
 Description=Supervisor Device Management Service
-After=dbus.service systemd-udevd.service network.target var-lib-hubv3-supervisor.mount
-Requires=var-lib-hubv3-supervisor.mount
+After=dbus.service systemd-udevd.service network.target var-lib-hubv3\x2dsupervisor.mount
+Requires=var-lib-hubv3\x2dsupervisor.mount
 Wants=network.target
 Before=home-assistant.service zigbee2mqtt.service otbr-agent.service
 

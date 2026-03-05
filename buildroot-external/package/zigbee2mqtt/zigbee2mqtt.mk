@@ -76,7 +76,7 @@ define ZIGBEE2MQTT_INSTALL_TARGET_CMDS
 	ln -sfn /opt/zigbee-herdsman $(TARGET_DIR)/opt/zigbee2mqtt/node_modules/zigbee-herdsman
 	rm -f  $(TARGET_DIR)/opt/zigbee2mqtt/node_modules/.pnpm/node_modules/zigbee-herdsman 2>/dev/null || true
 
-	# Create data mountpoint (will be bind-mounted from /mnt/data/zigbee2mqtt at runtime)
+	# Create data mountpoint (will be bind-mounted from /mnt/overlay/opt/zigbee2mqtt/data at runtime)
 	mkdir -p $(TARGET_DIR)/opt/zigbee2mqtt/data
 	mkdir -p $(TARGET_DIR)/opt/zigbee2mqtt/scripts
 	
