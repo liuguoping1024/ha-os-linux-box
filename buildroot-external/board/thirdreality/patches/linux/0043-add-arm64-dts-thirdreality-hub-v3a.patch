@@ -4,7 +4,7 @@ Date: Thu, 12 Feb 2026 10:00:00 +0800
 Subject: [PATCH] add arm64 dts ThirdReality linuxbox hub-v3a
 
 V3A is a cost-reduced variant:
-- 512MB/1GB RAM (auto-detected by U-Boot)
+- 1024MB RAM
 - No Thread UART (ttyAML6 / uart_B disabled)
 - uart_AO_B uses uart_ao_b_pins (not uart_ao_b_z_pins)
 - Zigbee only (no Thread support)
@@ -53,7 +53,7 @@ new file mode 100644
 +		/delete-property/ serial6;
 +	};
 +
-+	/* 512MB RAM; for 1GB use reg = <0x0 0x0 0x0 0x40000000> */
++	/* 1024MB RAM */
 +	memory@0 {
 +		device_type = "memory";
 +		reg = <0x0 0x0 0x0 0x40000000>;
