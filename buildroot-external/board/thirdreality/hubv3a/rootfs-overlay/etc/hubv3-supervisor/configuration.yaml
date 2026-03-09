@@ -33,8 +33,8 @@ hardware:
   # # HubV3A values:  reset_line=2,  boot_line=4
   # thread:
   #   chip: 0
-  #   reset_line: 2
-  #   boot_line: 4
+  #   reset_line: 1
+  #   boot_line: 3
 
 
 # ============================================================================
