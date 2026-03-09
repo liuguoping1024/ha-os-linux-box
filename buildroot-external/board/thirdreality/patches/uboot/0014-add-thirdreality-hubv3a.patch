@@ -1,10 +1,10 @@
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: "guoping.liu" <guoping.liu@3reality.com>
 Date: Mon, 3 Mar 2026 12:00:00 +0800
-Subject: [PATCH] add ThirdReality HubV3A support (1GB RAM)
+Subject: [PATCH] add ThirdReality HubV3A support
 
 HubV3A is a cost-reduced variant:
-- 1GB RAM
+- 1024MB RAM
 - No Thread UART
 - Zigbee only
 

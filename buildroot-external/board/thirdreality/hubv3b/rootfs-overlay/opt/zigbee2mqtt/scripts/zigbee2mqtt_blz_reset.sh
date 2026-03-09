@@ -1,17 +1,20 @@
 #!/bin/bash
 #
-# Zigbee2MQTT BLZ Reset Script (HubV3B)
-# GPIO pins: DB_RSTN1 = GPIOZ_1 (1), DB_BOOT1 = GPIOZ_3 (3)
+# Zigbee2MQTT BLZ Reset Script
+# Purpose: Reset Zigbee hardware via GPIO before service restart
+# Version: 1.0.0
 #
 
 set -e
 
 LOG_FILE="/var/log/zigbee2mqtt_blz_reset.log"
 
+# Helper function for logging
 log() {
     echo "[$(date '+%Y-%m-%d %H:%M:%S')] $1" | tee -a "$LOG_FILE"
 }
 
+# Function to check if gpioset command is available
 check_gpio_tools() {
     if ! command -v gpioset &> /dev/null; then
         log "ERROR: gpioset command not found. Please install gpiod tools:"
@@ -20,32 +23,40 @@ check_gpio_tools() {
     fi
 }
 
+# Function to perform GPIO reset sequence
 gpio_reset_sequence() {
     log "Starting Zigbee GPIO reset sequence..."
-
-    # GPIOZ_1 (pin 1) = reset, GPIOZ_3 (pin 3) = boot/ISP
-    gpioset 0 1=1
-    sleep 0.2
-
-    gpioset 0 1=0
-    sleep 0.2
-
+    
+     # GPIO 0:3 = 0 (boot pin high)
     gpioset 0 3=1
     sleep 0.2
 
+    # GPIO 0:3 = 0 (boot pin low)
     gpioset 0 3=0
     sleep 0.2
-
-    gpioset 0 3=1
+    
+    # GPIO 0:1 = 1 (reset pin high)
+    gpioset 0 1=1
+    sleep 0.2
+    
+    # GPIO 0:1 = 0 (reset pin low)
+    gpioset 0 1=0
+    sleep 0.2
+    
+    # GPIO 0:1 = 1 (reset pin high)
+    gpioset 0 1=1
     sleep 0.5
-
+    
     log "Zigbee GPIO reset sequence completed"
 }
 
+# Main execution
 log "Starting Zigbee2MQTT BLZ reset process..."
 
+# Check prerequisites
 check_gpio_tools
 
+# Perform GPIO reset
 gpio_reset_sequence
 
 log "Zigbee2MQTT BLZ reset process completed"

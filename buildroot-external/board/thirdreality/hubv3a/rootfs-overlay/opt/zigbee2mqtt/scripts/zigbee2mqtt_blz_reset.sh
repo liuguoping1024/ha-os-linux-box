@@ -23,23 +23,31 @@ check_gpio_tools() {
 gpio_reset_sequence() {
     log "[HubV3A] Starting Zigbee GPIO reset sequence..."
 
-    # GPIOA_17 (pin 43) = reset, GPIOA_16 (pin 42) = boot/ISP
-    gpioset 0 43=1
-    sleep 0.2
+    # GPIOA_17 (pin 43) = reset (active LOW)
+    # GPIOA_16 (pin 42) = ISP/boot (LOW = normal mode, HIGH = bootloader)
+    # Keep ISP LOW to boot in normal Zigbee mode (not bootloader)
 
-    gpioset 0 43=0
-    sleep 0.2
-
+     # GPIO 0:42 = 0 (boot pin high)
     gpioset 0 42=1
     sleep 0.2
 
+    # GPIO 0:42 = 0 (boot pin low)
     gpioset 0 42=0
     sleep 0.2
-
-    gpioset 0 42=1
+    
+    # GPIO 0:43 = 1 (reset pin high)
+    gpioset 0 43=1
+    sleep 0.2
+    
+    # GPIO 0:43 = 0 (reset pin low)
+    gpioset 0 43=0
+    sleep 0.2
+    
+    # GPIO 0:43 = 1 (reset pin high)
+    gpioset 0 43=1
     sleep 0.5
 
-    log "Zigbee GPIO reset sequence completed"
+    log "[HubV3A] Zigbee GPIO reset sequence completed"
 }
 
 log "Starting Zigbee2MQTT BLZ reset process..."
