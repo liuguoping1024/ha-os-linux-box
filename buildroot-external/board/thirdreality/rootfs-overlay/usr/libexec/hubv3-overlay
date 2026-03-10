@@ -16,8 +16,13 @@ if [ ! -d /mnt/overlay/var/lib/hubv3-supervisor ]; then
     fi
 fi
 
-# Bridge persistent state
-mkdir -p /mnt/overlay/var/lib/hubv3-bridge
+# Bridge persistent state (seed from /etc/hubv3-bridge on first boot)
+if [ ! -d /mnt/overlay/var/lib/hubv3-bridge ]; then
+    mkdir -p /mnt/overlay/var/lib/hubv3-bridge
+    if [ -d /etc/hubv3-bridge ]; then
+        cp -a /etc/hubv3-bridge/. /mnt/overlay/var/lib/hubv3-bridge/
+    fi
+fi
 
 # bflb_iot firmware tool needs a writable layer (overlayfs)
 mkdir -p /mnt/overlay/usr/lib/firmware/bl706/bflb_iot/upper

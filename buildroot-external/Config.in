@@ -25,4 +25,5 @@ source "$BR2_EXTERNAL_HASSOS_PATH/package/python-portalocker/Config.in"
 source "$BR2_EXTERNAL_HASSOS_PATH/package/python-pycryptodome/Config.in"
 source "$BR2_EXTERNAL_HASSOS_PATH/package/python-bflb-crypto-plus/Config.in"
 source "$BR2_EXTERNAL_HASSOS_PATH/package/hubv3-supervisor/Config.in"
+source "$BR2_EXTERNAL_HASSOS_PATH/package/hubv3-bridge/Config.in"
 

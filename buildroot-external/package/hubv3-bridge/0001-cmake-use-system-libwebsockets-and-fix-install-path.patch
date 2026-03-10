@@ -1,0 +1,132 @@
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -45,6 +45,10 @@
+ message(STATUS "========================================")
+ message(STATUS "")
+ 
++# Options
++option(USE_SYSTEM_LIBWEBSOCKETS "Use system libwebsockets instead of building from source" OFF)
++option(BUILD_TESTING "Build tests and tools" ON)
++
+ # 启用日志模块
+ add_definitions(-DTRHAL_LOG_ENABLE=1)
+ 
+@@ -56,25 +60,34 @@
+ pkg_check_modules(DBUS dbus-1)
+ find_package(OpenSSL REQUIRED)
+ 
+-# 查找 libcap (libwebsockets 静态编译依赖，可选)
+-find_library(CAP_LIBRARY cap)
+-if(CAP_LIBRARY)
+-    message(STATUS "libcap found: ${CAP_LIBRARY}")
+-    set(HAVE_LIBCAP TRUE)
+-else()
+-    message(STATUS "libcap not found: will try to link without it (may cause link error if libwebsockets requires it)")
+-    set(HAVE_LIBCAP FALSE)
+-endif()
+-
+ # ============================================================================
+-# libwebsockets - 静态编译 v4.1.6
++# libwebsockets
+ # ============================================================================
+-message(STATUS "=== Building with STATIC libwebsockets v4.1.6 ===")
+-add_subdirectory(third_party)
++if(USE_SYSTEM_LIBWEBSOCKETS)
++    pkg_check_modules(LIBWEBSOCKETS REQUIRED libwebsockets)
++    message(STATUS "=== Using SYSTEM libwebsockets (${LIBWEBSOCKETS_VERSION}) ===")
++    add_library(libwebsockets_static INTERFACE)
++    target_include_directories(libwebsockets_static INTERFACE ${LIBWEBSOCKETS_INCLUDE_DIRS})
++    target_link_libraries(libwebsockets_static INTERFACE ${LIBWEBSOCKETS_LIBRARIES})
++else()
++    message(STATUS "=== Building with STATIC libwebsockets v4.1.6 ===")
++    add_subdirectory(third_party)
+ 
+-# 使用静态库
++    # 查找 libcap (libwebsockets 静态编译依赖，可选)
++    find_library(CAP_LIBRARY cap)
++    if(CAP_LIBRARY)
++        message(STATUS "libcap found: ${CAP_LIBRARY}")
++        set(HAVE_LIBCAP TRUE)
++    else()
++        message(STATUS "libcap not found")
++        set(HAVE_LIBCAP FALSE)
++    endif()
++
++    set(LIBWEBSOCKETS_INCLUDE_DIRS ${LIBWEBSOCKETS_STATIC_INCLUDE_DIRS})
++endif()
++
++# 使用静态库（或系统库的 INTERFACE target）
+ set(LIBWEBSOCKETS_LIBRARIES libwebsockets_static)
+-set(LIBWEBSOCKETS_INCLUDE_DIRS ${LIBWEBSOCKETS_STATIC_INCLUDE_DIRS})
+ set(LIBWEBSOCKETS_FOUND TRUE)
+ 
+ if (NOT YAML_FOUND)
+@@ -204,13 +217,13 @@
+     hubv3_utils
+     ${LIBWEBSOCKETS_LIBRARIES}
+     ${OPENSSL_LIBRARIES}
+-    z  # zlib (静态 libwebsockets 依赖)
++    z  # zlib
+     pthread
+     m
+ )
+ 
+-# 如果找到 libcap，添加到 hubv3_websocket
+-if(HAVE_LIBCAP)
++# 如果找到 libcap，添加到 hubv3_websocket（仅静态编译模式）
++if(NOT USE_SYSTEM_LIBWEBSOCKETS AND HAVE_LIBCAP)
+     target_link_libraries(hubv3_websocket ${CAP_LIBRARY})
+ endif()
+ 
+@@ -296,8 +309,8 @@
+     m
+ )
+ 
+-# 如果找到 libcap，添加到主程序（libwebsockets 静态库可能需要）
+-if(HAVE_LIBCAP)
++# 如果找到 libcap，添加到主程序（仅静态编译模式）
++if(NOT USE_SYSTEM_LIBWEBSOCKETS AND HAVE_LIBCAP)
+     target_link_libraries(linuxbox-hubv3-bridge ${CAP_LIBRARY})
+ endif()
+ 
+@@ -329,17 +342,16 @@
+ 
+ # 安装规则
+ install(TARGETS linuxbox-hubv3-bridge
+-    RUNTIME DESTINATION /usr/local/bin
++    RUNTIME DESTINATION bin
+ )
+ 
+-install(FILES config/configuration.yaml.example
+-    DESTINATION /var/lib/hubv3-bridge
+-    RENAME configuration.yaml
++install(FILES config/configuration.yaml
++    DESTINATION /etc/hubv3-bridge
+     PERMISSIONS OWNER_READ OWNER_WRITE GROUP_READ WORLD_READ
+ )
+ 
+ install(FILES config/command.sh
+-    DESTINATION /var/lib/hubv3-bridge
++    DESTINATION /etc/hubv3-bridge
+     PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE
+ )
+ 
+@@ -349,13 +361,13 @@
+ message(STATUS "LinuxBox HubV3 Bridge Build Configuration")
+ message(STATUS "========================================")
+ message(STATUS "Executable: linuxbox-hubv3-bridge")
+-message(STATUS "Install path: /usr/local/bin")
+-message(STATUS "Config path: /var/lib/hubv3-bridge")
+-message(STATUS "libwebsockets: v4.1.6 (static)")
++message(STATUS "libwebsockets: ${USE_SYSTEM_LIBWEBSOCKETS} (system) / static")
+ message(STATUS "D-Bus support: ${DBUS_FOUND}")
+ message(STATUS "========================================")
+ message(STATUS "")
+ 
+ # 添加测试子目录
+-add_subdirectory(test)
+-add_subdirectory(tool)
++if(BUILD_TESTING)
++    add_subdirectory(test)
++    add_subdirectory(tool)
++endif()

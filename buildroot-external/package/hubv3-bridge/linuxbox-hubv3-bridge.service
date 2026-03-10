@@ -1,0 +1,21 @@
+[Unit]
+Description=LinuxBox HubV3 Bridge - IoT Device Integration Service
+After=network-online.target var-lib-hubv3\x2dbridge.mount mosquitto.service
+Requires=var-lib-hubv3\x2dbridge.mount
+Wants=network-online.target mosquitto.service
+
+[Service]
+Type=simple
+WorkingDirectory=/var/lib/hubv3-bridge
+ExecStart=/usr/bin/linuxbox-hubv3-bridge --config /var/lib/hubv3-bridge/configuration.yaml
+Restart=on-failure
+RestartSec=10
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=hubv3-bridge
+KillMode=mixed
+KillSignal=SIGTERM
+TimeoutStopSec=30
+
+[Install]
+WantedBy=multi-user.target

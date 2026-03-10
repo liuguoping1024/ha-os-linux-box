@@ -2,7 +2,7 @@
 Description=hubv3-bridge persistent state
 Requires=mnt-overlay.mount hubv3-overlay.service
 After=mnt-overlay.mount hubv3-overlay.service
-Before=supervisor.service
+Before=linuxbox-hubv3-bridge.service supervisor.service
 
 [Mount]
 What=/mnt/overlay/var/lib/hubv3-bridge
