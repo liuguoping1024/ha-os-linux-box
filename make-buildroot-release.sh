@@ -83,58 +83,29 @@ else
     echo "Buildroot directory exists and is complete (subdirs: $subdir_count), skipping sync"
 fi
 
-# --- Apply Node.js patches (only when building boards that need it) ---
-NODEJS_MK="${current_dir}/buildroot/package/nodejs/nodejs.mk"
-NODEJS_HASH="${current_dir}/buildroot/package/nodejs/nodejs-src/nodejs-src.hash"
-NODEJS_SRC_MK="${current_dir}/buildroot/package/nodejs/nodejs-src/nodejs-src.mk"
+# --- Apply buildroot patches ---
+# These patches modify the buildroot submodule (python3, nodejs, etc.)
+# They are idempotent: already-applied patches are skipped automatically.
+PATCH_DIR="${current_dir}/buildroot-external/patches/buildroot"
 
-if [ "${NEEDS_NODEJS}" = true ]; then
+if [ -d "${PATCH_DIR}" ]; then
     echo ""
-    echo "--- Applying Node.js patches for ${BOARD} ---"
-
-    # Patch 1: Upgrade Node.js to 22.13.1 (required by zigbee-on-host: ^20.19.0 || >=22.12.0)
-    if ! grep -q "NODEJS_COMMON_VERSION = 22.13.1" "${NODEJS_MK}" 2>/dev/null; then
-        echo "Patch 1: Upgrading Node.js -> 22.13.1"
-        sed -i 's/NODEJS_COMMON_VERSION = .*/NODEJS_COMMON_VERSION = 22.13.1/' "${NODEJS_MK}"
-        cat > "${NODEJS_HASH}" << 'HASHEOF'
-# From https://nodejs.org/dist/v22.13.1/SHASUMS256.txt.asc
-sha256  2722236564df6d33b1d953f23e21bf5247b62b38ea9000b47c655ee3a9a440e7  node-v22.13.1-headers.tar.xz
-sha256  0a237c413ccbab920640438bf6e1a32edb19845bdc21f0e1cd5b91545ce1c126  node-v22.13.1-linux-arm64.tar.xz
-sha256  f2be8dca2a7a518f6d187aa4b18abbeeafd71096a6d95f73f4d8bc0f8d2394ea  node-v22.13.1-linux-armv7l.tar.xz
-sha256  377a7a1ea66f39251e1657f419e9404d526fcca9910620d0ecf0a870c6308f6b  node-v22.13.1-linux-ppc64le.tar.xz
-sha256  0d2a5af33c7deab5555c8309cd3f373446fe1526c1b95833935ab3f019733b3b  node-v22.13.1-linux-x64.tar.xz
-sha256  cfce282119390f7e0c2220410924428e90dadcb2df1744c0c4a0e7baae387cc2  node-v22.13.1.tar.xz
-
-# Locally calculated
-sha256  9d72cce9b104ecb67feb8af38618511685190ae5a119cc0488ecae66b221000d  LICENSE
-HASHEOF
-        echo "Patch 1 applied"
-    else
-        echo "Patch 1: Node.js 22.13.1 already applied, skipping"
-    fi
-
-    # Patch 2: Use bundled c-ares (buildroot c-ares 1.27.0 lacks ares_query_dnsrec)
-    if grep -q "\-\-shared-cares" "${NODEJS_SRC_MK}" 2>/dev/null; then
-        echo "Patch 2: Removing --shared-cares (use bundled c-ares)"
-        sed -i '/--shared-cares \\/d' "${NODEJS_SRC_MK}"
-        sed -i '/\bc-ares\b/d' "${NODEJS_SRC_MK}"
-        echo "Patch 2 applied"
-    else
-        echo "Patch 2: --shared-cares already removed, skipping"
-    fi
-
-    # Patch 3: Use bundled libuv (buildroot libuv 1.48.0 lacks UV_TCP_REUSEPORT)
-    if grep -q "\-\-shared-libuv" "${NODEJS_SRC_MK}" 2>/dev/null; then
-        echo "Patch 3: Removing --shared-libuv (use bundled libuv 1.49.x)"
-        sed -i '/--shared-libuv \\/d' "${NODEJS_SRC_MK}"
-        sed -i '/\blibuv\b/d' "${NODEJS_SRC_MK}"
-        echo "Patch 3 applied"
-    else
-        echo "Patch 3: --shared-libuv already removed, skipping"
-    fi
+    echo "--- Applying buildroot patches ---"
+    for patch_file in "${PATCH_DIR}"/*.patch; do
+        [ -f "$patch_file" ] || continue
+        patch_name=$(basename "$patch_file")
+        if cd "${current_dir}/buildroot" && git apply --check "$patch_file" 2>/dev/null; then
+            echo "Applying: ${patch_name}"
+            git apply "$patch_file"
+            echo "  Applied successfully"
+        else
+            echo "Skipping: ${patch_name} (already applied or conflict)"
+        fi
+        cd "${current_dir}"
+    done
 else
     echo ""
-    echo "--- Board ${BOARD} does not need Node.js, skipping patches ---"
+    echo "--- No buildroot patches found, skipping ---"
 fi
 
 # --- Prepare directories ---
