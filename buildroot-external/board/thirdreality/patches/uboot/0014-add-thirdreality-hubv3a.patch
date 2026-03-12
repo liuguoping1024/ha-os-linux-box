@@ -4,7 +4,7 @@ Date: Mon, 3 Mar 2026 12:00:00 +0800
 Subject: [PATCH] add ThirdReality HubV3A support
 
 HubV3A is a cost-reduced variant:
-- 1024MB RAM
+- 512MB RAM
 - No Thread UART
 - Zigbee only
 
@@ -53,10 +53,10 @@ index 00000000000..a1b2c3d4e5f
 +		stdout-path = "serial0:115200n8";
 +	};
 +
-+	/* 1024MB RAM */
++	/* 512MB RAM */
 +	memory@0 {
 +		device_type = "memory";
-+		reg = <0x0 0x0 0x0 0x40000000>;
++		reg = <0x0 0x0 0x0 0x20000000>;
 +	};
 +
 +	reserved-memory {
@@ -606,7 +606,7 @@ index 00000000000..8de72d0d500
 +CONFIG_TEXT_BASE=0x01000000
 +CONFIG_NR_DRAM_BANKS=1
 +CONFIG_HAS_CUSTOM_SYS_INIT_SP_ADDR=y
-+CONFIG_CUSTOM_SYS_INIT_SP_ADDR=0x40000000
++CONFIG_CUSTOM_SYS_INIT_SP_ADDR=0x20000000
 +CONFIG_ENV_SIZE=0x2000
 +CONFIG_DM_GPIO=y
 +CONFIG_DEFAULT_DEVICE_TREE="meson-axg-thirdreality-hub-v3a"
