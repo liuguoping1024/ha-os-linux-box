@@ -408,13 +408,13 @@ index 00000000000..7776a46d967
 +
 +#include <asm/gpio.h>
 +
-+#define RGB_RED_GPIO		89
-+#define RGB_GREEN_GPIO		4
-+#define RGB_BLUE_GPIO		5
++#define RGB_RED_GPIO		3
++#define RGB_GREEN_GPIO		18
++#define RGB_BLUE_GPIO		19
 +
 +
 +// GPIOZ_9 --> 9
-+#define ZIGBEE_RXD_GPIO		9
++#define ZIGBEE_RXD_GPIO		4
 +
 +// GPIOX_17 --> 64
 +#define THREAD_RXD_GPIO		64
