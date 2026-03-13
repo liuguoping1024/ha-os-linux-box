@@ -27,3 +27,6 @@ fi
 # bflb_iot firmware tool needs a writable layer (overlayfs)
 mkdir -p /mnt/overlay/usr/lib/firmware/bl706/bflb_iot/upper
 mkdir -p /mnt/overlay/usr/lib/firmware/bl706/bflb_iot/work
+
+# /usr/lib/thirdreality writable working directory (persistent across reboots)
+mkdir -p /mnt/overlay/usr/lib/thirdreality

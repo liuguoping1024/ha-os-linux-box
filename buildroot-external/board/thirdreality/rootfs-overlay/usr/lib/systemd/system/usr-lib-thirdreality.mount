@@ -1,0 +1,13 @@
+[Unit]
+Description=ThirdReality writable working directory
+Requires=mnt-overlay.mount hubv3-overlay.service
+After=mnt-overlay.mount hubv3-overlay.service
+
+[Mount]
+What=/mnt/overlay/usr/lib/thirdreality
+Where=/usr/lib/thirdreality
+Type=none
+Options=bind
+
+[Install]
+WantedBy=os-bind.target
