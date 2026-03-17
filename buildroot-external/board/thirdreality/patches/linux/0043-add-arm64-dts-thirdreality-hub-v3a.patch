@@ -9,12 +9,11 @@ V3A is a cost-reduced variant:
 - uart_AO_B uses uart_ao_b_pins (not uart_ao_b_z_pins)
 - Zigbee only (no Thread support)
 - ramoops for crash logs, CMA reduced to 4MB
-- Keep secmon no-map to avoid DMA conflicts with ATF firmware
 
 ---
  arch/arm64/boot/dts/amlogic/Makefile              |  1 +
- .../amlogic/meson-axg-thirdreality-hub-v3a.dts    |105 ++++++++++++++++++++++
- 2 files changed, 106 insertions(+)
+ .../amlogic/meson-axg-thirdreality-hub-v3a.dts    |100 ++++++++++++++++++++++
+ 2 files changed, 101 insertions(+)
  create mode 100644 arch/arm64/boot/dts/amlogic/meson-axg-thirdreality-hub-v3a.dts
 
 diff --git a/arch/arm64/boot/dts/amlogic/Makefile b/arch/arm64/boot/dts/amlogic/Makefile
@@ -32,7 +31,7 @@ diff --git a/arch/arm64/boot/dts/amlogic/meson-axg-thirdreality-hub-v3a.dts b/ar
 new file mode 100644
 --- /dev/null
 +++ b/arch/arm64/boot/dts/amlogic/meson-axg-thirdreality-hub-v3a.dts
-@@ -0,0 +1,105 @@
+@@ -0,0 +1,100 @@
 +// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
 +/*
 + * Copyright (c) 2022 Vyacheslav Bocharov <adeep@lexina.in>
@@ -127,11 +126,6 @@ new file mode 100644
 +	status = "okay";
 +	pinctrl-0 = <&uart_ao_b_pins>;
 +	pinctrl-names = "default";
-+};
-+
-+/* V3A: force host mode (ID pin not wired for OTG detection) */
-+&usb {
-+	dr_mode = "host";
 +};
 +
 +/* No Thread UART on V3A */
