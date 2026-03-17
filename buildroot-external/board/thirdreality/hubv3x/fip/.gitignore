@@ -1,0 +1,6 @@
+# Amlogic FIP/U-Boot binary outputs (proprietary, must not be uploaded)
+# Build these locally with: ./build-fip-legacy.sh
+u-boot.bin
+u-boot.bin.sd.bin
+u-boot.bin.usb.bl2
+u-boot.bin.usb.tpl
