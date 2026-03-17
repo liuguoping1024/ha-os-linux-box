@@ -1,0 +1,2 @@
+# HubV3X uses its own DTB (2x512M DDR, different pinctrl)
+fdtfile=amlogic/meson-axg-thirdreality-hub-v3x.dtb

@@ -8,19 +8,21 @@ BOARD="hubv3"
 DO_CLEAN=false
 
 usage() {
-    echo "Usage: $0 [-b hubv3|hubv3a|hubv3b] [clean]"
+    echo "Usage: $0 [-b hubv3|hubv3a|hubv3b|hubv3x] [clean]"
     echo ""
     echo "Options:"
     echo "  -b BOARD   Board variant (default: hubv3)"
     echo "             hubv3  - base model, no zigbee2mqtt"
     echo "             hubv3b - same hardware as hubv3, with zigbee2mqtt"
     echo "             hubv3a - cost-reduced variant, with zigbee2mqtt"
+    echo "             hubv3x - 2x512MB DDR variant, legacy SDK bootloader"
     echo "  clean      Remove output directory before building"
     echo ""
     echo "Examples:"
     echo "  $0                    # build hubv3"
     echo "  $0 -b hubv3b         # build hubv3b"
     echo "  $0 -b hubv3a clean   # clean + build hubv3a"
+    echo "  $0 -b hubv3x clean   # clean + build hubv3x"
     exit 1
 }
 
@@ -48,15 +50,16 @@ case "${BOARD}" in
     hubv3)  DEFCONFIG="thirdreality_hubv3_defconfig"  ;;
     hubv3a) DEFCONFIG="thirdreality_hubv3a_defconfig" ;;
     hubv3b) DEFCONFIG="thirdreality_hubv3b_defconfig" ;;
+    hubv3x) DEFCONFIG="thirdreality_hubv3x_defconfig" ;;
     *)
-        echo "Error: unknown board '${BOARD}', must be hubv3|hubv3a|hubv3b"
+        echo "Error: unknown board '${BOARD}', must be hubv3|hubv3a|hubv3b|hubv3x"
         exit 1
         ;;
 esac
 
 NEEDS_NODEJS=false
 case "${BOARD}" in
-    hubv3a|hubv3b) NEEDS_NODEJS=true ;;
+    hubv3a|hubv3b|hubv3x) NEEDS_NODEJS=true ;;
 esac
 
 echo "========================================"

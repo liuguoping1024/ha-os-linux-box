@@ -1,0 +1,21 @@
+config BR2_PACKAGE_AMLOGIC_BOOT_FIP_LEGACY
+	bool "amlogic-boot-fip-legacy"
+	help
+	  Provides prebuilt Amlogic bootloader images built with the
+	  legacy SDK (U-Boot 2015.01 + old FIP toolchain).
+
+	  This is required for boards that need BL2 ACS DDR parameter
+	  passing (e.g. dual-chip DDR configurations) which is not
+	  supported by modern amlogic-boot-fip.
+
+if BR2_PACKAGE_AMLOGIC_BOOT_FIP_LEGACY
+
+config BR2_PACKAGE_AMLOGIC_BOOT_FIP_LEGACY_BOARD
+	string "Board name for legacy FIP"
+	depends on BR2_PACKAGE_AMLOGIC_BOOT_FIP_LEGACY
+	help
+	  Name of the board subdirectory under
+	  board/thirdreality/<board>/fip/ containing the prebuilt
+	  u-boot.bin.sd.bin.
+
+endif
