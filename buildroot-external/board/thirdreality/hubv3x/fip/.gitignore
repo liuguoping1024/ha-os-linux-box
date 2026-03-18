@@ -1,6 +1,15 @@
-# Amlogic FIP/U-Boot binary outputs (proprietary, must not be uploaded)
-# Build these locally with: ./build-fip-legacy.sh
+# Amlogic proprietary blobs (bl2, bl30, bl31) - SDK license prohibits redistribution
+/blobs/
+
+# Amlogic FIP packaging tools (aml_encrypt, fip_create, acs_tool)
+/tools/
+
+# Build intermediates and artifacts
+/build/
+
+# Final bootloader outputs (contain proprietary blobs, must not be uploaded)
 u-boot.bin
 u-boot.bin.sd.bin
 u-boot.bin.usb.bl2
 u-boot.bin.usb.tpl
+u-boot.bin.encrypt*
