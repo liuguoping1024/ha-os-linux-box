@@ -6,6 +6,7 @@ mkdir -p /mnt/overlay/opt/zigbee2mqtt/data/external_converters
 
 # Mosquitto persistent data
 mkdir -p /mnt/overlay/var/lib/mosquitto
+chown mosquitto:mosquitto /mnt/overlay/var/lib/mosquitto
 
 # Supervisor persistent state (survives zram /var remount)
 # Seed from /etc/hubv3-supervisor on first boot, then bind-mount overlay dir
